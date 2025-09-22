@@ -15,8 +15,14 @@
    python thinker_disk.py 
 ```
 
+
 > 실행 화면
 
-![alt text](image.png)
+![alt text](image-2.png)
 
 
+> 추후 예정 
+
+ - 디스크 최적화 버튼 및 기능 구현
+  
+ - 디스크 여러개 일시 보여주는 기능 구현  
