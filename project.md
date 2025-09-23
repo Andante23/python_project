@@ -15,7 +15,7 @@
 
 > 실행 화면
 
-![alt text](image-2.png)
+![alt text](image.png)
 
 > 추후 예정
 
