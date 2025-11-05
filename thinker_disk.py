@@ -62,6 +62,7 @@ else:  # 그게 아니라면
     combo.current(0)
     
     # 콤보 비활성화 
+
     combo.config(state="disabled")
      
     
@@ -69,45 +70,61 @@ else:  # 그게 아니라면
 progress = ttk.Progressbar(root, length=400, maximum=400)
 progress.pack(pady=10 , padx=10)
 
-
-
-# 디스크 사용률, 총용량 , 사용중 , 남은 용량 label 생성
-
 labels = {}
 for text, name in [("디스크 사용률", "diUse_label"), 
                    ("디스크 총용량", "ditot_label"), 
                    ("디스크 사용중", "diUsed_label"), 
-                   ("디스크 남은", "diFree_label")]:
+                   ("디스크 남은", "diFree_label")
+                   ]:
     
     labels[name] = tk.Label(root, text=f"{text}: 0")
     labels[name].pack(pady=5)
+
+# 디스크 사용률, 총용량 , 사용중 , 남은 용량 label 생성
+
+def display_disk_capacity(any,labels):
+    labels["diUse_label"].config(text=f"디스크 사용률: {any.percent}%")
+    labels["ditot_label"].config(text=f"디스크 총용량: {any.total} ")
+    labels["diUsed_label"].config(text=f"디스크 사용중: {any.used} ")
+    labels["diFree_label"].config(text=f"디스크 남은: {any.free} ")
+    
+
     
     
 
 # 디스크 사용률, 총용량 , 사용중 , 남은 용량 나타내는 함수 
 # 인 disk_label 선언
-    def display_disk_capicity(disk,labels):
-      labels["diUse_label"].config(text=f"디스크 사용률: {disk.percent}%")
-      labels["ditot_label"].config(text=f"디스크 총용량: {disk.total} ")
-      labels["diUsed_label"].config(text=f"디스크 사용중: {disk.used} ")
-      labels["diFree_label"].config(text=f"디스크 남은: {disk.free} ")
+
 
 
 
 
 # 디스크와 관련 정보를 보여주는 대시보드 함수 선언 
 def dashboard():
-    #1. 콤보박스에서 디스크 선택하면  디스크 정보를 가져옴
-    select_combo = combo.get() 
-    disk = psutil.disk_usage(select_combo)
-    # 프로그레스로 나타냄
-    progress["value"] = disk.percent
-    # 디스크 용량 정보 나타내는 함수 작동       
-    display_disk_capicity(disk,labels)
-    root.after(1000, dashboard)  # 정보를 1초마다 갱신
-
-
+    
+ if len(available_drives) < 0 :
+       select_combo = combo.get()
+       try:
+           disk = psutil.disk_usage(select_combo)
+           progress["value"] = disk.percent  # 퍼센트 반영
+           display_disk_capacity(disk, labels)
+       except Exception as e:
+            print(f"⚠️ 디스크 접근 오류: {e}")
+       finally:
+            root.after(1000, dashboard)  # 1초마다 갱신
+    
+ else:
+        for label in labels.values():
+         label.config(state="disable")
+    
+      
+  
+   
+   
+   
+   
 dashboard()
 root.mainloop()
+
 
 
